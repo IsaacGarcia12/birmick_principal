@@ -1,0 +1,52 @@
+<div class="container">
+  <!-- <h1>Tus estudios <small>aquí los puedes administrar</small></h1> -->
+  <h1>Respuestas del formulario</h1>
+  <hr>
+  <div class="row col-md-12" *ngIf="!answers || answers.length <= 0">
+    <p class="alert alert-danger col-md-12"><strong>No hay respuestas registradas</strong></p>
+  </div>
+  <div class="" *ngIf="answers && answers.length > 0">
+    <div class="card-columns">
+      <div class="card" style="width: 20rem;" *ngFor="let answer of answers;">
+        <div class="card-body">
+          <h4 class="card-title"> {{ answer.answersBy }} </h4>
+          <h6 class="card-subtitle mb-2 text-muted"> <b>Fecha de respuesta:</b> {{ answer.answeredAt | date }} </h6>
+          <button href="#" class="btn btn-dark btn-sm" (click)="showAnswers( answer._id )">Ver respuestas</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-modal #formAnswersModal>
+  <div class="app-modal-header">
+    <h4>Respuestas</h4>
+  </div>
+  <div class="app-modal-body">
+    <div class="pre-scrollable">
+      <table class="table table-sm" #answersTable *ngIf="currentAnswers">
+        <thead>
+          <tr>
+            <th scope="col">Pregunta</th>
+            <th scope="col">Respuesta</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let ans of currentAnswers.answers;">
+            <td> {{ ans.question }} </td>
+            <td> {{ ans.answer }} </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <b>Descargar Respuestas:</b>
+    <br>
+    <button type="button" class="btn btn-dark col-md-2 buttonMargin" (click)="downloadAsXLSX()">Excel</button>
+    <button type="button" class="btn btn-dark col-md-2 buttonMargin" (click)="downloadAsPDF()">PDF</button>
+    <!-- <button type="button" class="btn btn-dark col-md-2 buttonMargin">TXT</button>
+    <button type="button" class="btn btn-dark col-md-2 buttonMargin">XML</button> -->
+  </div>
+  <div class="app-modal-footer">
+      <button type="button" class="btn btn-dark" (click)="formAnswersModal.hide()">Cerrar diálogo</button>
+  </div>
+</app-modal>

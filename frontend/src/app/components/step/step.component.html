@@ -1,0 +1,211 @@
+<!-- <h1>Tus estudios <small>aquí los puedes administrar</small></h1> -->
+<div class="container" *ngIf="loading">
+  <h4>Cargando...</h4>
+</div>
+<div class="container" *ngIf="!loading && !step">
+    <p class="alert alert-danger"><strong>No existe la etapa</strong></p>
+</div>
+<div class="container" *ngIf="!loading && step">
+  <div class="row">
+      <h1> {{ step.name }} </h1>
+  </div>
+  <div class="row">
+    <button class="btn btn-dark buttonMargin" (click)="newFormNameModal.show();">Agregar formulario</button>
+  </div>
+  <hr>
+  <div class="row">
+    <div class="col-md-4">
+      <h4>Detalles</h4>
+      <div class="card  col-md-12">
+        <div class="card-body">
+          <h6><b>Número de etapa: </b> {{ step.numStep }}</h6>
+          <h6><b>Duración: </b> {{ step.during }}</h6>
+          <p class="card-text"> {{ step.comments }} </p>
+          <a href="#" class="btn btn-dark buttonMargin" [routerLink]="['/editStep', step._id, studioid]">Editar información</a>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 mt-3 mx-auto">
+          <hr>
+          <h4>Agregar archivo</h4>
+          <div *ngIf="(!patients || patients.length <= 0) && !loading">
+            <p class="alert alert-danger"><strong>Antes de poder agregar archivos es necesario tener pacientes registrados en el estudio</strong></p>
+          </div>
+          <form *ngIf="( patients && patients.length > 0) && !loading" [formGroup]="fileForm" (ngSubmit)="onSubmit()">
+            <div class="form-group">
+              <label>1. Seleccione el archivo a subir <b>(Peso máximo: 10MB)</b></label>
+              <input
+                #fileupload
+                formControlName="file"
+                type="file"
+                class="form-control-file"
+                (change)="fileChange(fileupload.files)"
+                id="file">
+            </div>
+            <div class="form-group">
+              <label for="sujetos">2. ¿A qué paciente pertenece el archivo?</label>
+              <select class="form-control"
+                      name="patient"
+                      formControlName="patient">
+                <option *ngFor="let patient of patients;"
+                [value]="patient._id"> {{ patient.name }} {{ patient.asurname }} {{ patient.msurname }}</option>
+              </select>
+            </div>
+            <button type="submit"
+                    name="button"
+                    class="btn btn-dark"
+                    [disabled]="!fileForm.valid || fileUploadLoading || invalidFile">
+
+              <span *ngIf="!fileUploadLoading">Agregar archivo</span>
+              <span *ngIf="fileUploadLoading">Agregando archivo, espere...</span>
+              <i [ngClass]="{ 'fa-save': !fileUploadLoading, 'fa-spin':fileUploadLoading }"
+              class="fa fa-refresh fa-spin"></i>
+            </button>
+          </form>
+          <div class="alert"
+              [ngClass]="{'alert-danger': failedUploadFile || invalidFile, 'alert-warning': fileUploadLoading, 'alert-success': !failedUploadFile}"
+              *ngIf="fileUploadMessage"
+              style="margin-top:10px;">
+            {{ fileUploadMessage }}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="row">
+        <h4>Archivos</h4>
+      </div>
+      <div class="row  col-md-12" *ngIf="!files || files.length <= 0">
+        <p class="alert alert-danger"><strong>No hay archivos registrados</strong></p>
+      </div>
+      <div class="row" *ngIf="files && files.length > 0">
+        <div class="col-sm-4" *ngFor="let file of files;">
+          <div class="card" style="margin-top:10px;">
+            <div class="card-body">
+              <img width="50" height="70" src="./assets/img/file.png" alt="file">
+              <h6><b> {{ file.name }} </b></h6>
+              <h6 class="card-subtitle mb-2 text-muted">Paciente: {{ file.patientName }} {{ file.patientAsurname }} {{ file.patientMsurname }}</h6>
+              <button [disabled] = "downloadFileLoading" class="badge  badge-pill badge-dark" (click) = "downloadFile(file._id, file.name)">Descargar</button>
+              <button button class="badge badge-pill badge-danger" (click)="showDeleteFileModal( file._id )">Eliminar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row mt-4">
+        <h4>Formularios</h4>
+      </div>
+      <div class="row  col-md-12" *ngIf="!forms || forms.length <= 0">
+        <p class="alert alert-danger"><strong>No hay formularios registrados</strong></p>
+      </div>
+      <div class="row" *ngIf="forms && forms.length > 0">
+        <div class="col-md-4" *ngFor="let form of forms;">
+          <div class="card" style="margin-top:10px;">
+            <div class="card-body">
+              <h5><b> {{ form.name }} </b></h5>
+              <a href="#" class="badge badge-pill badge-dark col-md-12" [routerLink]="['/editDynamicForm', form._id]">Editar</a>
+              <a href="#"class="badge badge-pill badge-dark col-md-12" [routerLink]="['/answerForm', form._id]">Responder</a>
+              <a href="#" class="badge badge-pill badge-dark col-md-12" [routerLink]="['/myFormAnswers', form._id]">Ver respuestas</a>
+              <button class="badge badge-pill badge-danger col-md-12" (click)="showDeleteFormModal( form._id )">Eliminar</button>
+            </div>
+          <div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-modal #newFormNameModal>
+  <div class="app-modal-header">
+    <h4>Agregar formulario</h4>
+    <small>Introduzca el nombre del nuevo formulario</small>
+  </div>
+  <div class="app-modal-body">
+    <form [formGroup]="stepForm" (ngSubmit)="createForm()">
+      <div class="form-group">
+        <label for="formName">Nombre del formulario</label>
+        <input
+          class="form-control"
+          type="text"
+          name="formName"
+          id="formName"
+          value=""
+          placeholder="Nombre del formulario"
+          formControlName="formName">
+      </div>
+      <div class="form-group">
+        <button type="submit" name="button" class="btn btn-dark" [disabled]="!stepForm.valid">Crear formulario</button>
+      </div>
+    </form>
+  </div>
+  <div class="app-modal-footer">
+      <button type="button" class="btn btn-dark" (click)="newFormNameModal.hide()">Cerrar diálogo</button>
+    </div>
+</app-modal>
+
+<app-modal #downloadingFileModal>
+  <div class="app-modal-header">
+    <h4>Descargando archivo...</h4>
+    <small>Espere por favor <i [ngClass]="{ 'fa-spin':downloadFileLoading }"
+    class="fa fa-refresh fa-spin"></i></small>
+  </div>
+  <div class="app-modal-body">
+    En breve se mostrará la ventana del navegador que le permite guardarlo.
+  </div>
+  <div class="app-modal-footer">
+  </div>
+</app-modal>
+
+<app-modal #deleteFormConfirmationModal>
+  <div class="app-modal-header">
+    <h4>Aviso</h4>
+  </div>
+  <div class="app-modal-body">
+    ¿Está seguro de eliminar el formulario?
+    <b>TODAS las respuestas también serán eliminadas.</b>
+  </div>
+  <div class="app-modal-footer">
+      <button type="button" class="btn btn-danger" (click)="deleteForm()">Eliminar</button>
+      <button type="button" class="btn btn-dark" (click)="cancelFormDelete()">Cerrar</button>
+  </div>
+</app-modal>
+
+<app-modal #deleteFileConfirmationModal>
+  <div class="app-modal-header">
+    <h4>Aviso</h4>
+  </div>
+  <div class="app-modal-body">
+    ¿Está seguro de eliminar el archivo?
+  </div>
+  <div class="app-modal-footer">
+      <button type="button" class="btn btn-danger" (click)="deleteFile()">Eliminar</button>
+      <button type="button" class="btn btn-dark" (click)="cancelFileDelete()">Cerrar</button>
+  </div>
+</app-modal>
+
+<app-modal #fileDownloadErrorModal>
+  <div class="app-modal-header">
+    <h4>Aviso</h4>
+  </div>
+  <div class="app-modal-body">
+    <div *ngIf="fileDownloadError">
+      <b class="text-danger">{{ fileDownloadError }}</b>
+    </div>
+  </div>
+  <div class="app-modal-footer">
+      <button type="button" class="btn btn-dark" (click)="fileDownloadErrorModal.hide()">Cerrar</button>
+  </div>
+</app-modal>
+
+<app-modal #deleteResponseModal>
+  <div class="app-modal-header">
+    <h4>Aviso</h4>
+  </div>
+  <div class="app-modal-body">
+    <div *ngIf="deleteMessage">
+      <b class="text-success">{{ deleteMessage }}</b>
+    </div>
+  </div>
+  <div class="app-modal-footer">
+      <button type="button" class="btn btn-dark" (click)="deleteResponseModal.hide()">Cerrar</button>
+  </div>
+</app-modal>

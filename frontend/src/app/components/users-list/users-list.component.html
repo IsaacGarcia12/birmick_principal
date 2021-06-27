@@ -1,0 +1,68 @@
+<div class="container">
+  <h3>Usuarios</h3>
+  <hr>
+  <div class="row col-md-12" *ngIf="(!users || users.length <= 0) && !loading">
+    <p class="alert alert-danger col-md-12"><strong>No se encontraron usuarios</strong></p>
+  </div>
+  <div class="row col-md-12" *ngIf="(!users || users.length <= 0) && loading">
+    <p>Cargando...</p>
+  </div>
+  <div class="row">
+    <div class="col-sm-4" *ngFor="let user of users; let i = index;">
+      <div class="card" style="margin-top:10px;">
+        <div class="card-body">
+          <h4 class="card-title">{{ user.name }} {{ user.asurname }} {{ user.msurname }}</h4>
+          <h6><b>Username: </b>{{ user.username }}</h6>
+          <div *ngIf="user.role === 'ROLE_ADMIN'">
+            <h6><b>Rol: </b>Administrador</h6>
+          </div>
+          <div *ngIf="user.role === 'ROLE_PROJMANAG'">
+            <h6><b>Rol: </b>Líder de proyecto</h6>
+          </div>
+          <div *ngIf="user.role === 'ROLE_RESCH'">
+            <h6><b>Rol: </b>Investigador</h6>
+          </div>
+          <div *ngIf="user.role === 'ROLE_VISITOR'">
+            <h6><b>Rol: </b>Visitante</h6>
+          </div>
+          <h6><b>Email: </b>{{ user.email }}</h6>
+          <h6><b>Sexo: </b>{{user.gender}}</h6>
+          <a href="#" class="btn btn-dark buttonMargin" [routerLink]="['/editUser', user._id]">Editar usuario</a>
+          <button href="#" class="btn btn-danger buttonMargin" (click)="showDeleteUserModal( user._id )">Eliminar usuario</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-modal #deleteUserConfirmationModal>
+  <div class="app-modal-header">
+    <h4>Aviso</h4>
+  </div>
+  <div class="app-modal-body">
+    <b>¿Está seguro de eliminar al usuario?</b>
+    <p><b>Se eliminarán TODOS los estudios y pacientes asociados al usuario.</b></p>
+    <p class="text-danger"><b>Esta acción no se puede deshacer</b></p>
+    <div *ngIf="loadingDeleteUser">
+      <p>Eliminando usuario, espere por favor</p>
+    </div>
+  </div>
+  <div class="app-modal-footer">
+      <button type="button" class="btn btn-danger" (click)="deleteUser()">Eliminar</button>
+      <button type="button" class="btn btn-dark" (click)="cancelUserDelete()">Cerrar</button>
+  </div>
+</app-modal>
+
+<app-modal #deleteResponseModal>
+  <div class="app-modal-header">
+    <h4>Aviso</h4>
+  </div>
+  <div class="app-modal-body">
+    <div *ngIf="deleteMessage">
+      <b class="text-success">{{ deleteMessage }}</b>
+    </div>
+  </div>
+  <div class="app-modal-footer">
+      <button type="button" class="btn btn-dark" (click)="deleteResponseModal.hide()">Cerrar</button>
+  </div>
+</app-modal>

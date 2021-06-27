@@ -1,0 +1,158 @@
+<div class="container">
+  <h3>{{ title }}</h3>
+</div>
+<div class="container" *ngIf="patient || id === 'new'">
+  <form  [formGroup]="patientForm" (ngSubmit)="onSubmit()">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group">
+          <label for="sur1">Nombre</label>
+          <input
+                type="text"
+                class="form-control"
+                id="name"
+                placeholder="Nombre"
+                name="name"
+                formControlName="name">
+        </div>
+        <div *ngIf="patientForm.get('name').errors?.required && patientForm.get('name').touched"
+          class="form-control-feedback alert alert-danger">
+          El nombre es necesario.
+        </div>
+        <div *ngIf="patientForm.get('name').errors?.minlength && patientForm.get('name').touched"
+          class="form-control-feedback alert alert-danger">
+          Mínimo 5 caracteres.
+        </div>
+        <div class="form-group">
+          <label for="sur1">Apellido paterno</label>
+          <input
+                type="text"
+                class="form-control"
+                id="asurname"
+                placeholder="Apellido paterno"
+                name="asurname"
+                formControlName="asurname">
+        </div>
+        <div *ngIf="patientForm.get('asurname').errors?.required && patientForm.get('asurname').touched"
+          class="form-control-feedback alert alert-danger">
+          Introduzca el apellido paterno.
+        </div>
+        <div class="form-group">
+          <label for="sur1">Apellido materno</label>
+          <input
+                type="text"
+                class="form-control"
+                id="msurname"
+                placeholder="Apellido materno"
+                name="msurname"
+                formControlName="msurname">
+        </div>
+        <div *ngIf="patientForm.get('msurname').errors?.required && patientForm.get('msurname').touched"
+          class="form-control-feedback alert alert-danger">
+          El apellido materno es necesario.
+        </div>
+        <div class="form-group">
+          <label for="sur1">Edad (en años)</label>
+          <input
+                type="number"
+                class="form-control"
+                id="age"
+                placeholder="Edad"
+                name="age"
+                formControlName="age">
+        </div>
+        <div *ngIf="patientForm.get('age').errors?.required && patientForm.get('age').touched"
+          class="form-control-feedback alert alert-danger">
+          Introduzca la edad.
+        </div>
+        <div *ngIf="patientForm.get('age').errors?.max && patientForm.get('age').dirty"
+          class="form-control-feedback alert alert-danger">
+          {{ patientForm.get('age').errors?.max.actual }}  no es válido, debe ser menor o igual que {{ patientForm.get('age').errors?.max.max }}
+        </div>
+        <div *ngIf="patientForm.get('age').errors?.min && patientForm.get('age').dirty"
+          class="form-control-feedback alert alert-danger">
+          {{ patientForm.get('age').errors?.min.actual }}  no es válido, debe ser mayor o igual que {{ patientForm.get('age').errors?.min.min }}
+        </div>
+        <div class="form-group">
+         <label>Sexo</label>
+         <br>
+           <label *ngFor="let s of sexos" class="mr-3">
+             <input
+                  formControlName="gender"
+                   name="gender"
+                   type="radio"
+                   [value] = "s">
+             {{ s }}
+           </label>
+       </div>
+       <div *ngIf="patientForm.get('gender').errors?.required && patientForm.get('gender').touched"
+         class="form-control-feedback alert alert-danger">
+         Seleccione el sexo.
+       </div>
+        <div class="form-group">
+          <label for="sur1">Peso (en kilogramos)</label>
+          <input
+                type="number"
+                lang="en-150"
+                step="0.01"
+                class="form-control"
+                id="weight"
+                placeholder="Peso"
+                name="weight"
+                formControlName="weight">
+        </div>
+        <div *ngIf="patientForm.get('weight').errors?.required && patientForm.get('weight').touched"
+          class="form-control-feedback alert alert-danger">
+          Introduzca el peso
+        </div>
+        <div *ngIf="patientForm.get('weight').errors?.max && patientForm.get('weight').dirty"
+          class="form-control-feedback alert alert-danger">
+          {{ patientForm.get('weight').errors?.max.actual }}  no es válido, debe ser menor o igual que {{ patientForm.get('weight').errors?.max.max }}kg
+        </div>
+        <div *ngIf="patientForm.get('weight').errors?.min && patientForm.get('weight').dirty"
+          class="form-control-feedback alert alert-danger">
+          {{ patientForm.get('weight').errors?.min.actual }}  no es válido, debe ser mayor o igual que {{ patientForm.get('weight').errors?.min.min }}kg
+        </div>
+        <div class="form-group">
+          <label for="sur2">Altura (en metros)</label>
+          <input
+                lang="en-150"
+                type="number"
+                step="0.01"
+                class="form-control"
+                id="height"
+                placeholder="Altura"
+                name="height"
+                formControlName="height">
+        </div>
+        <div *ngIf="patientForm.get('height').errors?.required && patientForm.get('height').touched"
+          class="form-control-feedback alert alert-danger">
+          La altura es necesaria
+        </div>
+        <div *ngIf="patientForm.get('height').errors?.max && patientForm.get('height').dirty"
+          class="form-control-feedback alert alert-danger">
+          {{ patientForm.get('height').errors?.max.actual }}  no es válido, debe ser menor o igual que {{ patientForm.get('height').errors?.max.max }}m
+        </div>
+        <div *ngIf="patientForm.get('height').errors?.min && patientForm.get('height').dirty"
+          class="form-control-feedback alert alert-danger">
+          {{ patientForm.get('height').errors?.min.actual }}  no es válido, debe ser mayor o igual que {{ patientForm.get('height').errors?.min.min }}m
+        </div>
+        <div class="form-group">
+          <label for="sur2">Actividad principal</label>
+          <input
+                type="text"
+                class="form-control"
+                id="mainActivity"
+                placeholder="Actividad principal"
+                name="mainActivity"
+                formControlName="mainActivity">
+        </div>
+        <div *ngIf="patientForm.get('mainActivity').errors?.required && patientForm.get('mainActivity').touched"
+          class="form-control-feedback alert alert-danger">
+          Introdizca la actividad principal.
+        </div>
+      </div>
+    </div>
+    <button type="submit" class="btn btn-dark" [disabled] = "!patientForm.valid || loading">Guardar</button>
+  </form>
+</div>

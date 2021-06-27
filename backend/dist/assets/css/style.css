@@ -1,0 +1,206 @@
+/**RESPONSIVE TYPOGRAPHY*/
+html {
+  font-size: 14px;
+  height:100%;
+}
+
+@include media-breakpoint-up(sm) {
+  html {
+    font-size: 16px;
+  }
+}
+
+@include media-breakpoint-up(md) {
+  html {
+    font-size: 20px;
+  }
+}
+
+@include media-breakpoint-up(lg) {
+  html {
+    font-size: 28px;
+  }
+}
+/*DE https://getbootstrap.com/docs/4.0/content/typography/#text-utilities*/
+/*****************************************************/
+body{
+  background-color: white;
+  height: 100%;
+  margin-bottom: 100px;
+  /*clear: both;*/
+  padding-bottom: 50px;
+}
+
+footer{
+  margin-top: 15px;
+  height: 200px;
+  left: 0;
+  right: 0;
+  background-color: #dee3ea;
+  z-index: 150;
+}
+
+nav{
+  margin-bottom: 30px;
+  position: fixed;
+}
+
+.footer-logo{
+  height: 70px;
+  margin: 0px 12px 0px 12px;
+}
+
+#myFooter .footer-copyright{
+  /*color: #717375;*/
+  padding-top:3px;
+  margin-top:15px;
+  margin-bottom:15px;
+	/*padding-bottom:3px;*/
+	text-align: center;
+}
+
+#myFooter .footer-copyright p{
+  margin: 0;
+	color: #717375;
+}
+
+#myFooter ul{
+	list-style-type: none;
+  padding-left: 0;
+  line-height: 1.7;
+
+}
+
+#myFooter h5{
+	font-size: 18px;
+  color: #3e4042;
+  font-weight: bold;
+  margin-top: 20px;
+}
+
+#myFooter a, p{
+	color: #686d72;
+	text-decoration: none;
+}
+#myFooter a, p{
+	color: #686d72;
+  margin-top: 20px;
+}
+
+#myFooter a:hover, #myFooter a:focus{
+	text-decoration: none;
+	color:black;
+}
+
+#myFooter .myCols{
+	text-align: center;
+}
+
+#myFooter .footer-logos{
+	text-align: center;
+  margin-top: 20px;
+}
+
+#myFooter .footer-logos a{
+    font-size: 32px;
+    margin-right: 5px;
+    margin-left: 5px;
+    color: #f9f9f9;
+    padding: 10px;
+    transition: 0.2s;
+}
+
+#myFooter .footer-logos a:hover{
+	text-decoration: none;
+
+}
+
+@media screen and (max-width: 767px){
+  footer{
+    bottom: auto;
+  }
+	#myFooter {
+		text-align: center;
+    height: 580px;
+	}
+}
+
+ /*IPAD*/
+@media only screen
+and (min-width : 768px)
+and (min-height: 1024px)
+and (max-width : 1024px)
+{
+  footer{
+    bottom: 0;
+  }
+  .footer-logo{
+    height: 55px;
+  }
+  #myFooter {
+    text-align: center;
+    height: 214px;
+  }
+}
+
+/* @media only screen
+and (min-width : 1024px)
+and (max-width : 1800px)
+{
+  footer{
+    bottom: 0;
+  }
+} */
+
+@media only screen
+and (min-width : 1024px)
+and (min-height: 768px)
+and (max-width : 8192px)
+{
+  footer{
+    bottom: 0;
+  }
+}
+
+.login-form .signup-form{
+  margin-left: 60px;
+  /*text-align: left;*/
+}
+
+.contenedor{
+  min-height: 360px;
+}
+
+.studioContainer {
+    // background-color: #f7f7f7;
+    border-radius: 5px;
+    //padding: 20px;
+}
+
+.buttonMargin{
+  margin: 4px;
+}
+
+.uglyBg{
+  background-color: #823030
+}
+
+/*FORMS*/
+
+.ng-invalid.ng-touched:not(form) {
+  border: 1px solid red;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+input[type="number"] {
+    -moz-appearance: textfield;
+     text-overflow: ellipsis;
+}
+
+input[placeholder] { text-overflow: ellipsis; }
+::-moz-placeholder { text-overflow: ellipsis; } /* firefox 19+ */
+input:-moz-placeholder { text-overflow: ellipsis; }

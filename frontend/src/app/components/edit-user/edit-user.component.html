@@ -1,0 +1,108 @@
+<div class="container">
+  <h3>Editar usuario</h3>
+</div>
+<div class="container" *ngIf="user">
+  <form  [formGroup]="userForm" (ngSubmit)="onSubmit()">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group">
+          <label for="name">Usuario</label>
+          <input
+                type="text"
+                class="form-control"
+                id="username"
+                placeholder="Usuario"
+                name="username"
+                formControlName="username">
+        </div>
+        <div *ngIf="userForm.get('username').errors?.required && userForm.get('username').touched"
+          class="form-control-feedback alert alert-danger">
+          El nombre de usuario es necesario.
+        </div>
+        <div class="form-group">
+          <label for="name">Nombre(s)</label>
+          <input
+                type="text"
+                class="form-control"
+                id="name"
+                placeholder="Nombre(s)"
+                name="name"
+                formControlName="name">
+        </div>
+        <div *ngIf="userForm.get('name').errors?.required && userForm.get('name').touched"
+          class="form-control-feedback alert alert-danger">
+          El nombre es necesario.
+        </div>
+        <div class="form-group">
+          <label for="sur1">Apellido paterno</label>
+          <input
+                type="text"
+                class="form-control"
+                id="asurname"
+                placeholder="Apellido paterno"
+                name="asurname"
+                formControlName="asurname">
+        </div>
+        <div *ngIf="userForm.get('asurname').errors?.required && userForm.get('asurname').touched"
+          class="form-control-feedback alert alert-danger">
+          El apellido paterno es necesario.
+        </div>
+        <div class="form-group">
+          <label for="sur2">Apellido materno</label>
+          <input
+                type="text"
+                class="form-control"
+                id="msurname"
+                placeholder="Apellido materno"
+                name="msurname"
+                formControlName="msurname">
+        </div>
+        <div *ngIf="userForm.get('msurname').errors?.required && userForm.get('msurname').touched"
+          class="form-control-feedback alert alert-danger">
+          El apellido materno es necesario.
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <label for="email">Correo electrónico</label>
+          <input
+                type="email"
+                class="form-control"
+                id="email"
+                placeholder="correo@ejemplo.com"
+                name="email"
+                formControlName="email">
+        </div>
+        <div *ngIf="userForm.get('email').errors?.required && userForm.get('email').touched"
+          class="form-control-feedback alert alert-danger">
+          El correo es necesario.
+        </div>
+        <div *ngIf="userForm.get('email').errors?.pattern && userForm.get('email').touched"
+          class="form-control-feedback alert alert-danger">
+          Introduzca un correo válido.
+        </div>
+        <div class="form-group">
+          <select class="form-control" name="role" id="role" formControlName="role">
+            <option value="ROLE_PROJMANAG">Líder de proyecto</option>
+            <option value="ROLE_RESCH">Investigador</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <button type="submit" class="btn btn-dark" [disabled] = "!userForm.valid || loading">Guardar cambios</button>
+  </form>
+</div>
+
+<app-modal #updatePatientResponseModal>
+  <div class="app-modal-header">
+    <h4>Aviso</h4>
+  </div>
+  <div class="app-modal-body">
+    <div *ngIf="updatePatientMessage">
+      {{ updatePatientMessage }}
+    </div>
+    <div *ngIf="updatePatientError">
+      {{ updatePatientError }}
+    </div>
+  </div>
+</app-modal>

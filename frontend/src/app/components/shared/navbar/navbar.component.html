@@ -1,0 +1,84 @@
+<!-- <nav *ngIf="!loggedIn" class="navbar navbar-expand-lg navbar-dark bg-dark"> -->
+<nav *ngIf="!identity" class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand" href="#">
+    <img src="../assets/img/logo-dom.png" width="30" height="30" class="d-inline-block align-top" alt="">
+    Birmick
+  </a>    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+  <span class="navbar-toggler-icon"></span>
+</button>
+
+<div class="collapse navbar-collapse" id="navbarSupportedContent">
+  <ul class="navbar-nav mr-auto">
+    <li class="nav-item" routerLinkActive = "active">
+      <a class="nav-link" [routerLink] = "['home']">Inicio</a>
+    </li>
+    <li class="nav-item" routerLinkActive = "active">
+      <a class="nav-link"[routerLink] = "['signup']">Registrarse</a>
+    </li>
+    <li class="nav-item" routerLinkActive = "active">
+      <a class="nav-link" [routerLink] = "['login']">Iniciar sesión</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="javascript:void(0)">Contacto</a>
+    </li>
+  </ul>
+
+</div>
+</nav>
+
+<!-- <nav *ngIf="loggedIn" class="navbar navbar-expand-lg navbar-dark bg-dark"> -->
+<nav *ngIf="identity" class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand" href="#">
+    <img src="../assets/img/logo-dom.png" width="30" height="30" class="d-inline-block align-top" alt="">
+    Birmick
+  </a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item" routerLinkActive = "active">
+        <a class="nav-link" [routerLink] = "['home']">Inicio</a>
+      </li>
+      <li *ngIf="identity.role != 'ROLE_VISITOR'" class="nav-item" routerLinkActive = "active">
+        <a class="nav-link" [routerLink] = "['myStudies']">Mis estudios</a>
+      </li>
+      <li *ngIf="identity.role != 'ROLE_VISITOR'" class="nav-item" routerLinkActive = "active">
+        <a class="nav-link" [routerLink] = "['myPatients']">Mis pacientes</a>
+      </li>
+      <li class="nav-item" routerLinkActive = "active">
+        <a class="nav-link" [routerLink] = "['studies']">Explorar estudios</a>
+      </li>
+      <li *ngIf="identity.role == 'ROLE_ADMIN' || identity.role == 'ROLE_PROJMANAG'" class="nav-item" routerLinkActive = "active">
+        <a class="nav-link" [routerLink] = "['validateUsers']">Validar usuarios</a>
+      </li>
+      <li *ngIf="identity.role == 'ROLE_ADMIN'" class="nav-item" routerLinkActive = "active">
+        <a class="nav-link" [routerLink] = "['users']">Administrar usuarios</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" (click)="logout()" href="">Cerrar sesión</a>
+      </li>
+      <!-- <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Cuenta
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <a class="dropdown-item" href="">Configuración</a>
+          <a  (click)="logout()" class="dropdown-item" href="">Cerrar sesión</a>
+        </div>
+      </li> -->
+    </ul>
+    <form *ngIf="identity.role != 'ROLE_VISITOR'" class="form-inline my-2 my-lg-0" [formGroup]="searchForm" (ngSubmit)="submitSearch()">
+      <input
+      class="form-control mr-sm-2"
+      type="text"
+      placeholder="Buscar estudios"
+      aria-label="Buscar"
+      name="keyword"
+      id="keyword"
+      formControlName="keyword">
+      <button class="btn btn-success my-2 my-sm-0" type="submit">Buscar</button>
+    </form>
+  </div>
+</nav>

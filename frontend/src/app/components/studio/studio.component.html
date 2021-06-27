@@ -1,0 +1,186 @@
+<div class="container" *ngIf="loading">
+  <h3>Cargando...</h3>
+</div>
+<div class="container" *ngIf="!loading && !studio">
+    <p class="alert alert-danger"><strong>No existe el estudio</strong></p>
+</div>
+<div class="container " *ngIf="!loading && studio">
+  <!-- <h1>Tus estudios <small>aquí los puedes administrar</small></h1> -->
+  <div class="row">
+      <h1><small>Estudio</small> {{ studio.name }}</h1>
+  </div>
+  <div class="row">
+    <a href="#" class="btn btn-dark buttonMargin" [routerLink]="['/editStep', 'new', studio._id]">Agregar etapa</a>
+    <button class="btn btn-dark buttonMargin" (click)="addPatientModal.show(); getPatientsNotInTheStudio();">Agregar paciente al estudio</button>
+    <!-- <a href="#" class="btn btn-danger buttonMargin">Eliminar estudio</a> -->
+  </div>
+  <hr>
+  <div class="">
+    <div class="row">
+      <div class="col-md-6">
+        <h3>Detalles</h3>
+        <div class="card col-md-12">
+          <div class="card-body">
+            <h6><b>Fecha de aplicación: </b>{{ studio.appliedAt | date}}</h6>
+            <h6><b>Fecha de registro: </b>{{ studio.createdAt | date }}</h6>
+            <h6><b>Frecuencia de muestreo: </b>{{ studio.frecSamp }} Hz</h6>
+            <h6><b>Línea de grabación: </b>{{ studio.lineaGrab }}</h6>
+            <h6><b>Número de muestras: </b>{{ studio.numSamp }}</h6>
+            <h6><b>Número de segmentos: </b>{{ studio.numSeg }}</h6>
+            <h6><b>Número de etapas: </b>{{ studio.numSteps }}</h6>
+            <h6><b>Tiempo base: </b>{{ studio.tmpoBase }}</h6>
+            <div *ngIf="studio.privacy === 'public'">
+              <h6><b>Privacidad: </b>Público</h6>
+            </div>
+            <div *ngIf="studio.privacy === 'private'">
+              <h6><b>Privacidad: </b>Privado</h6>
+            </div>
+            <p class="card-text">{{ studio.comments }}</p>
+            <a href="#" class="btn btn-dark buttonMargin" [routerLink]="['/editStudio', studio._id]">Editar información</a>
+          </div>
+        </div>
+        <div class="col-md-12 mt-3 mx-auto">
+          <hr>
+          <div class="row">
+            <h3>Pacientes</h3>
+          </div>
+          <div class="row  col-md-12" *ngIf="!patients || patients.length <= 0">
+            <p class="alert alert-danger"><strong>No hay pacientes en el estudio</strong></p>
+          </div>
+          <div class="row" *ngIf="patients && patients.length > 0">
+            <div class="col-sm-6" *ngFor="let patient of patients;">
+              <div class="card" style="margin-top:10px;">
+                <div class="card-body">
+                  <h4 class="card-title">  {{ patient.name }} {{ patient.asurname }} {{ patient.msurname }}</h4>
+                  <h6><b>Genero: </b>{{ patient.gender }}</h6>
+                  <h6><b>Altura: </b>{{ patient.height }}</h6>
+                  <h6><b>Peso: </b>{{ patient.weight }}</h6>
+                  <h6><b>Actividad principal: </b>{{ patient.mainActivity }}</h6>
+                  <a href="#" class="btn btn-dark buttonMargin" [routerLink]="['/editPatient', patient._id]">Editar paciente</a>
+                  <button class="btn btn-danger buttonMargin" (click)="showRemovePatientModal( patient._id )">Quitar del estudio</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-5 mx-auto">
+        <div class="row col-md-12">
+            <h3>Etapas</h3>
+          </div>
+          <div class="row col-md-12" *ngIf="!steps || steps.length <= 0">
+            <p class="alert alert-danger col-md-12"><strong>No hay etapas registradas</strong></p>
+          </div>
+            <div class="row" *ngIf="steps && steps.length > 0">
+              <div class="col-sm-6" style="width: 20rem;" *ngFor="let step of steps;">
+                <div class="card" style="margin-top:10px;">
+                  <div class="card-body">
+                    <h4 class="card-title"> {{ step.name }} </h4>
+                    <h6 class="card-subtitle mb-2 text-muted"> Número de etapa: {{ step.numStep }}  </h6>
+                    <h6 class="card-subtitle mb-2 text-muted"> Duración: {{ step.during }} </h6>
+                    <p class="card-text"> {{ step.comments }} </p>
+                    <a href="#" class="btn btn-dark buttonMargin" [routerLink]="['/myStep', studio._id,step._id]">Ver etapa</a>
+                    <button class="btn btn-danger buttonMargin" (click)="showDeleteStepModal( step._id )">Eliminar etapa</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-modal #addPatientModal>
+  <div class="app-modal-header">
+    <h4>Agregar paciente</h4>
+    <small>Haga click en el botón del paciente que desea agregar</small>
+  </div>
+  <div class="app-modal-body">
+    <div *ngIf="loadingNotPatients">
+      Cargando pacientes...
+    </div>
+    <div *ngIf="!loadingNotPatients && (!notPatients || notPatients.length <= 0)">
+      <b>No se encontraron pacientes</b>
+    </div>
+    <div class="pre-scrollable" *ngIf="!loadingNotPatients && (notPatients && notPatients.length > 0)">
+      <ul class="list-group col-md-12">
+        <li class="list-group-item" *ngFor="let notPatient of notPatients;">
+          <h6> {{ notPatient.name }} {{ notPatient.asurname }} {{ notPatient.msurname }}</h6>
+          <button type="button" name="button" class="badge badge-dark" (click)="addPatient( notPatient )">
+            Agregar al estudio
+          </button>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="app-modal-footer">
+      <button type="button" class="btn btn-dark" (click)="addPatientModal.hide()">Cerrar</button>
+    </div>
+</app-modal>
+
+<app-modal #addPatientResponseModal>
+  <div class="app-modal-header">
+    <h4>Aviso</h4>
+  </div>
+  <div class="app-modal-body">
+    <div *ngIf="addPatientMessage">
+      {{ addPatientMessage }}
+    </div>
+    <div *ngIf="addPatientError">
+      {{ addPatientError }}
+    </div>
+  </div>
+  <div class="app-modal-footer">
+      <button type="button" class="btn btn-dark" (click)="addPatientResponseModal.hide()">Cerrar</button>
+  </div>
+</app-modal>
+
+<app-modal #deleteStepConfirmationModal>
+  <div class="app-modal-header">
+    <h4>Aviso</h4>
+  </div>
+  <div class="app-modal-body">
+    <b>¿Está seguro de eliminar la etapa?</b>
+    <p><b>Se eliminarán TODOS los archivos, formularios y respuestas asociados a ella.</b></p>
+    <p class="text-danger"><b>Esta acción no se puede deshacer</b></p>
+    <div *ngIf="loadingDeleteStep">
+      <p>Eliminando etapa, espere por favor</p>
+    </div>
+  </div>
+  <div class="app-modal-footer">
+      <button type="button" class="btn btn-danger" (click)="deleteStep()">Eliminar</button>
+      <button type="button" class="btn btn-dark" (click)="cancelStepDelete()">Cerrar</button>
+  </div>
+</app-modal>
+
+<app-modal #deleteResponseModal>
+  <div class="app-modal-header">
+    <h4>Aviso</h4>
+  </div>
+  <div class="app-modal-body">
+    <div *ngIf="deleteMessage">
+      <b class="text-success">{{ deleteMessage }}</b>
+    </div>
+  </div>
+  <div class="app-modal-footer">
+      <button type="button" class="btn btn-dark" (click)="deleteResponseModal.hide()">Cerrar</button>
+  </div>
+</app-modal>
+
+<app-modal #removePatientConfirmationModal>
+  <div class="app-modal-header">
+    <h4>Aviso</h4>
+  </div>
+  <div class="app-modal-body">
+    <b>¿Está seguro de quitar al paciente de este estudio?</b>
+    <p><b>Se eliminarán TODOS los archivos asociados a él</b></p>
+    <p class="text-danger"><b>Esta acción no se puede deshacer</b></p>
+    <div *ngIf="loadingRemovePatient">
+      <p>Quitando paciente, espere por favor</p>
+    </div>
+  </div>
+  <div class="app-modal-footer">
+      <button type="button" class="btn btn-danger" (click)="removePatient()">Quitar</button>
+      <button type="button" class="btn btn-dark" (click)="cancelRemovePatient()">Cerrar</button>
+  </div>
+</app-modal>

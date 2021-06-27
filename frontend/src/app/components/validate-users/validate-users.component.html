@@ -1,0 +1,47 @@
+<div class="container">
+  <h3>Validar usuarios</h3>
+  <hr>
+  <div class="alert alert-danger" *ngIf="(!notValidatedUsers || notValidatedUsers.length == 0) && !loading">
+    No hay usuarios sin validar
+  </div>
+  <div class="row col-md-12" *ngIf="(!notValidatedUsers || notValidatedUsers.length <= 0) && loading">
+    <p>Cargando...</p>
+  </div>
+  <div class="row" *ngIf="notValidatedUsers">
+    <div class="col-md-4" *ngFor="let user of notValidatedUsers; let i = index;">
+      <div class="card" style="margin-top:10px;">
+        <div class="card-body">
+          <form [formGroup]="validationForms[i]" class="">
+            <label><h4> {{ user.name }} {{ user.asurname }} {{ user.msurname }} </h4></label>
+            <label><h6> {{ user.email }} </h6></label>
+            <div class="form-group">
+              <label>Validar como:</label>
+              <select class="form-control" name="role" id="role" formControlName="role">
+                <option value="ROLE_PROJMANAG">Líder de proyecto</option>
+                <option value="ROLE_RESCH">Investigador</option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-dark" [disabled] = "loading" (click)="validateUser(user, i)">Validar usuario</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-modal #validateUserResponseModal>
+  <div class="app-modal-header">
+    <h4>Aviso</h4>
+  </div>
+  <div class="app-modal-body">
+    <div *ngIf="validateUserMessage">
+      {{ validateUserMessage }}
+    </div>
+    <div *ngIf="validateUserError">
+      {{ validateUserError }}
+    </div>
+  </div>
+  <div class="app-modal-footer">
+      <button type="button" class="btn btn-dark" (click)="validateUserResponseModal.hide()">Cerrar</button>
+  </div>
+</app-modal>

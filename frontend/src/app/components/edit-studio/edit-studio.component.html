@@ -1,0 +1,180 @@
+<div class="container">
+  <h3>{{ title }}</h3>
+</div>
+<div class="container" *ngIf="studio || id === 'new'">
+  <form  [formGroup]="studioForm" (ngSubmit)="onSubmit()" style="margin-bottom: 170px;">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group">
+          <label for="name">Nombre</label>
+          <input
+                type="text"
+                class="form-control"
+                id="name"
+                placeholder="Nombre del estudio"
+                name="name"
+                formControlName="name">
+        </div>
+        <div *ngIf="studioForm.get('name').errors?.required && studioForm.get('name').touched"
+          class="form-control-feedback alert alert-danger">
+          El nombre es necesario.
+        </div>
+        <div *ngIf="studioForm.get('name').errors?.minlength && studioForm.get('name').dirty"
+          class="form-control-feedback alert alert-danger">
+          Mínimo 5 caracteres
+        </div>
+        <div class="form-group">
+          <label for="name">Fecha de aplicación</label>
+          <!-- <input
+                type="date"
+                class="form-control"
+                id="appliedAt"
+                placeholder="Fecha de aplicación"
+                name="appliedAt"
+                formControlName="appliedAt"> -->
+          <ng-datepicker
+                          [options]="options"
+                          id="appliedAt"
+                          name="appliedAt"
+                          formControlName="appliedAt">
+          </ng-datepicker>
+        </div>
+        <div *ngIf="studioForm.get('appliedAt').errors?.required && studioForm.get('appliedAt').touched"
+          class="form-control-feedback alert alert-danger">
+          Introduzca la fecha de aplicación.
+        </div>
+        <div class="form-group">
+          <label for="frecSamp">Frecuencia de muestreo (en Hertz)</label>
+          <input
+                type="number"
+                class="form-control"
+                id="frecSamp"
+                placeholder="Frecuencia de muestreo"
+                name="frecSamp"
+                formControlName="frecSamp">
+        </div>
+        <div *ngIf="studioForm.get('frecSamp').errors?.required && studioForm.get('frecSamp').touched"
+          class="form-control-feedback alert alert-danger">
+          La frecuencia de muestreo es necesaria.
+        </div>
+        <div *ngIf="studioForm.get('frecSamp').errors?.min && studioForm.get('frecSamp').dirty"
+          class="form-control-feedback alert alert-danger">
+          {{ studioForm.get('frecSamp').errors?.min.actual }}  no es válido, debe ser mayor o igual que {{ studioForm.get('frecSamp').errors?.min.min }}Hz
+        </div>
+        <div class="form-group">
+          <label for="sur1">Línea de grabación</label>
+          <input
+                type="text"
+                class="form-control"
+                id="lineaGrab"
+                placeholder="Línea de grabación"
+                name="lineaGrab"
+                formControlName="lineaGrab">
+        </div>
+        <div *ngIf="studioForm.get('lineaGrab').errors?.required && studioForm.get('lineaGrab').touched"
+          class="form-control-feedback alert alert-danger">
+          Introduzca la línea de grabación.
+        </div>
+        <div class="form-group">
+          <label for="sur2">Número de muestras</label>
+          <input
+                type="number"
+                class="form-control"
+                id="numSamp"
+                placeholder="Número de muestras"
+                name="numSamp"
+                formControlName="numSamp">
+        </div>
+        <div *ngIf="studioForm.get('numSamp').errors?.required && studioForm.get('numSamp').touched"
+          class="form-control-feedback alert alert-danger">
+          El número de muestras es necesario.
+        </div>
+        <div *ngIf="studioForm.get('numSamp').errors?.min && studioForm.get('numSamp').dirty"
+          class="form-control-feedback alert alert-danger">
+          {{ studioForm.get('numSamp').errors?.min.actual }}  no es válido, debe ser mayor o igual que {{ studioForm.get('numSamp').errors?.min.min }}
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <label for="email">Número de segmentos</label>
+          <input
+                type="number"
+                class="form-control"
+                id="numSeg"
+                placeholder="Número de segmentos"
+                name="numSeg"
+                formControlName="numSeg">
+        </div>
+        <div *ngIf="studioForm.get('numSeg').errors?.required && studioForm.get('numSeg').touched"
+          class="form-control-feedback alert alert-danger">
+          Introduzca el número de segmentos.
+        </div>
+        <div *ngIf="studioForm.get('numSeg').errors?.min && studioForm.get('numSeg').dirty"
+          class="form-control-feedback alert alert-danger">
+          {{ studioForm.get('numSeg').errors?.min.actual }}  no es válido, debe ser mayor o igual que {{ studioForm.get('numSeg').errors?.min.min }}
+        </div>
+        <div class="form-group">
+          <label for="password">Número de etapas</label>
+          <input
+                type="number"
+                class="form-control"
+                id="numSteps"
+                placeholder="Número de etapas"
+                name="numSteps"
+                formControlName="numSteps">
+        </div>
+        <div *ngIf="studioForm.get('numSteps').errors?.required && studioForm.get('numSteps').touched"
+          class="form-control-feedback alert alert-danger">
+          El número de etapas es necesario.
+        </div>
+        <div *ngIf="studioForm.get('numSteps').errors?.min && studioForm.get('numSteps').dirty"
+          class="form-control-feedback alert alert-danger">
+          {{ studioForm.get('numSteps').errors?.min.actual }}  no es válido, debe ser mayor o igual que {{ studioForm.get('numSteps').errors?.min.min }}
+        </div>
+        <div class="form-group">
+          <label for="passwordconf">Tiempo base</label>
+          <select class="form-control" name="privacy" id="tmpoBase" formControlName="tmpoBase">
+            <option value="milisegundos">milisegundos</option>
+            <option value="segundos">segundos</option>
+            <option value="minutos">minutos</option>
+            <option value="horas">horas</option>
+          </select>
+        </div>
+        <div *ngIf="studioForm.get('tmpoBase').errors?.required && studioForm.get('tmpoBase').touched"
+          class="form-control-feedback alert alert-danger">
+          Introduzca el tiempo base.
+        </div>
+        <div class="form-group">
+          <label for="passwordconf">Comentarios</label>
+          <input
+                type="text"
+                class="form-control"
+                id="comments"
+                placeholder="Comentarios"
+                name="comments"
+                formControlName="comments">
+        </div>
+        <div *ngIf="studioForm.get('comments').errors?.required && studioForm.get('comments').touched"
+          class="form-control-feedback alert alert-danger">
+          Los comentarios son necesarios.
+        </div>
+        <div class="form-group">
+          <label>Privacidad</label>
+          <select class="form-control" name="privacy" id="privacy" formControlName="privacy">
+            <option value="public">Público</option>
+            <option value="private">Privado</option>
+          </select>
+        </div>
+        <div *ngIf="studioForm.get('privacy').errors?.required && studioForm.get('privacy').touched"
+          class="form-control-feedback alert alert-danger">
+          Seleccione el nivel de privacidad.
+        </div>
+      </div>
+    </div>
+    <button type="submit" class="btn btn-dark float-right" [disabled] = "!studioForm.valid || loading">Guardar</button>
+  </form>
+  <div *ngIf="apiResponse"
+    class="form-control-feedback alert alert-danger mt-3">
+    {{ apiResponse }}
+  </div>
+</div>

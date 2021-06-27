@@ -1,0 +1,66 @@
+<div class="container">
+  <!-- <h1>Tus estudios <small>aquí los puedes administrar</small></h1> -->
+  <h1>Tus estudios</h1>
+  <a href="#" class="btn btn-dark buttonMargin" [routerLink]="['/editStudio', 'new']">Nuevo estudio</a>
+  <hr>
+  <div class="row col-md-12" *ngIf="(!studies || studies.length <= 0) && !loading">
+    <p class="alert alert-danger col-md-12"><strong>No hay estudios registrados</strong></p>
+  </div>
+  <div class="row col-md-12" *ngIf="(!studies || studies.length <= 0) && loading">
+    <p>Cargando...</p>
+  </div>
+  <div class="" *ngIf="studies || studies.length > 0">
+    <div class="row">
+      <div class="col-sm-3" *ngFor="let studio of studies;">
+        <div class="card" style="margin-top:10px;">
+          <div class="card-body">
+            <h4 class="card-title"> {{ studio.name }} </h4>
+            <h6 class="card-subtitle mb-2 text-muted"> Creado: {{ studio.createdAt | date }} </h6>
+            <h6 class="card-subtitle mb-2 text-muted"> Aplicado: {{ studio.appliedAt | date }} </h6>
+            <div *ngIf="studio.privacy === 'public'">
+              <h6>Privacidad: Público</h6>
+            </div>
+            <div *ngIf="studio.privacy === 'private'">
+              <h6>Privacidad: Privado</h6>
+            </div>
+            <p class="card-text"> {{ studio.comments }} </p>
+            <a href="#" class="btn btn-dark btn-sm" [routerLink]="['/myStudio', studio._id]">Ver estudio</a>
+            <button href="#" class="btn btn-danger btn-sm" (click)="showDeleteStudioModal( studio._id )">Eliminar estudio</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-modal #deleteStudioConfirmationModal>
+  <div class="app-modal-header">
+    <h4>Aviso</h4>
+  </div>
+  <div class="app-modal-body">
+    <b>¿Está seguro de eliminar el estudio?</b>
+    <p><b>Se eliminarán TODOS los archivos, formularios y respuestas asociados a cada etapa contenida en el estudio.</b></p>
+    <p class="text-danger"><b>Esta acción no se puede deshacer</b></p>
+    <div *ngIf="loadingDeleteStudio">
+      <p>Eliminando estudio, espere por favor</p>
+    </div>
+  </div>
+  <div class="app-modal-footer">
+      <button type="button" class="btn btn-danger" (click)="deleteStudio()">Eliminar</button>
+      <button type="button" class="btn btn-dark" (click)="cancelStudioDelete()">Cerrar</button>
+  </div>
+</app-modal>
+
+<app-modal #deleteResponseModal>
+  <div class="app-modal-header">
+    <h4>Aviso</h4>
+  </div>
+  <div class="app-modal-body">
+    <div *ngIf="deleteMessage">
+      <b class="text-success">{{ deleteMessage }}</b>
+    </div>
+  </div>
+  <div class="app-modal-footer">
+      <button type="button" class="btn btn-dark" (click)="deleteResponseModal.hide()">Cerrar</button>
+  </div>
+</app-modal>

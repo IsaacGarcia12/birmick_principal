@@ -1,0 +1,150 @@
+<div class="container">
+    <h1>Registro</h1>
+    <div *ngIf="alertRegister">
+        <div class="alert alert-danger">
+          {{alertRegister}}
+        </div>
+    </div>
+    <div *ngIf="succesRegister">
+        <div class="alert alert-success">
+          {{succesRegister}}
+        </div>
+    </div>
+    <form  [formGroup]="signUpForm" (ngSubmit)="onSubmit()" style="margin-bottom: 10px;">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="name">Usuario</label>
+            <input
+                  type="text"
+                  class="form-control"
+                  id="username"
+                  placeholder="Usuario"
+                  name="username"
+                  formControlName="username">
+          </div>
+          <div *ngIf="signUpForm.get('username').errors?.required && !signUpForm.get('username').pristine"
+            class="form-control-feedback alert alert-danger">
+            El nombre de usuario es necesario.
+          </div>
+          <div class="form-group">
+            <label for="name">Nombre(s)</label>
+            <input
+                  type="text"
+                  class="form-control"
+                  id="name"
+                  placeholder="Nombre(s)"
+                  name="name"
+                  formControlName="name">
+          </div>
+          <div *ngIf="signUpForm.get('name').errors?.required && !signUpForm.get('name').pristine"
+            class="form-control-feedback alert alert-danger">
+            El nombre es necesario.
+          </div>
+          <div class="form-group">
+            <label for="sur1">Apellido paterno</label>
+            <input
+                  type="text"
+                  class="form-control"
+                  id="asurname"
+                  placeholder="Apellido paterno"
+                  name="asurname"
+                  formControlName="asurname">
+          </div>
+          <div *ngIf="signUpForm.get('asurname').errors?.required && !signUpForm.get('asurname').pristine"
+            class="form-control-feedback alert alert-danger">
+            El apellido paterno es necesario.
+          </div>
+          <div class="form-group">
+            <label for="sur2">Apellido materno</label>
+            <input
+                  type="text"
+                  class="form-control"
+                  id="msurname"
+                  placeholder="Apellido materno"
+                  name="msurname"
+                  formControlName="msurname">
+          </div>
+          <div *ngIf="signUpForm.get('msurname').errors?.required && !signUpForm.get('msurname').pristine"
+            class="form-control-feedback alert alert-danger">
+            El apellido materno es necesario.
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+           <label>Sexo</label>
+           <br>
+             <label *ngFor="let s of sexos" class="mr-3">
+               <input
+                    formControlName="gender"
+                     name="gender"
+                     type="radio"
+                     [value] = "s">
+               {{ s }}
+             </label>
+
+         </div>
+          <div class="form-group">
+            <label for="email">Correo electrónico</label>
+            <input
+                  type="email"
+                  class="form-control"
+                  id="email"
+                  placeholder="correo@ejemplo.com"
+                  name="email"
+                  formControlName="email">
+          </div>
+          <div *ngIf="signUpForm.get('email').errors?.required && !signUpForm.get('email').pristine"
+            class="form-control-feedback alert alert-danger">
+            El correo es necesario.
+          </div>
+          <div *ngIf="signUpForm.get('email').errors?.pattern && !signUpForm.get('email').pristine"
+            class="form-control-feedback alert alert-danger">
+            Introduzca un correo válido.
+          </div>
+          <div class="form-group">
+            <label for="password">Contraseña</label>
+            <input
+                  type="password"
+                  class="form-control"
+                  id="password"
+                  placeholder="Contraseña"
+                  name="password"
+                  formControlName="password">
+          </div>
+          <div *ngIf="signUpForm.get('password').errors?.required && !signUpForm.get('password').pristine"
+            class="form-control-feedback alert alert-danger">
+            Introduzca una contraseña.
+          </div>
+          <div *ngIf="signUpForm.get('password').errors?.minlength && !signUpForm.get('password').pristine"
+            class="form-control-feedback alert alert-danger">
+            Mínimo 6 caracteres.
+          </div>
+          <div class="form-group">
+            <label for="password2">Confirme su contraseña</label>
+            <input
+                  type="password"
+                  class="form-control"
+                  id="password2"
+                  placeholder="Confirme su contraseña"
+                  name="password2"
+                  formControlName="password2">
+          </div>
+          <div *ngIf="signUpForm.get('password2').errors?.passwordNotMatch && !signUpForm.get('password2').pristine"
+            class="form-control-feedback alert alert-danger">
+            Las contraseñas no coinciden.
+          </div>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-dark" [disabled] = "!signUpForm.valid || loading">Registrarse</button>
+    </form>
+  <div class="row text-center mt-10">
+    <div class="col-md-12">
+      <div class="alert alert-warning" role="alert">
+        <h4 class="alert-heading">Tenga en cuenta</h4>
+        <p>Registrarse no le otorga acceso a la información en su totalidad, sólo tiene acceso a información selecta.</p>
+        <p>Si desea acceso total <b>debe ser validado por un líder de proyecto</b> después de haberse registrado.</p>
+      </div>
+    </div>
+  </div>
+</div>

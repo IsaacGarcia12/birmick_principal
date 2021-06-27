@@ -1,0 +1,49 @@
+<div class="container" *ngIf="loading">
+  <h3>Cargando...</h3>
+</div>
+<div class="container " *ngIf="!loading && studio">
+  <!-- <h1>Tus estudios <small>aquí los puedes administrar</small></h1> -->
+  <div class="row">
+      <h1><small>Estudio</small> {{ studio.name }}</h1>
+  </div>
+  <hr>
+  <div class="">
+    <div class="row">
+      <div class="col-md-6">
+        <h3>Detalles</h3>
+        <div class="card col-md-12">
+          <div class="card-body">
+            <h6><b>Fecha de aplicación: </b>{{ studio.appliedAt | date}}</h6>
+            <h6><b>Fecha de registro: </b>{{ studio.createdAt | date }}</h6>
+            <h6><b>Frecuencia de muestreo: </b>{{ studio.frecSamp }} Hz</h6>
+            <h6><b>Línea de grabación: </b>{{ studio.lineaGrab }}</h6>
+            <h6><b>Número de muestras: </b>{{ studio.numSamp }}</h6>
+            <h6><b>Número de segmentos: </b>{{ studio.numSeg }}</h6>
+            <h6><b>Número de etapas: </b>{{ studio.numSteps }}</h6>
+            <h6><b>Tiempo base: </b>{{ studio.tmpoBase }}</h6>
+            <p class="card-text">{{ studio.comments }}</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-5 mx-auto">
+        <div class="row col-md-12">
+            <h3>Etapas</h3>
+          </div>
+          <div class="row col-md-12" *ngIf="!steps">
+            <p class="alert alert-danger col-md-12"><strong>No hay etapas registradas</strong></p>
+          </div>
+            <div class="row col-md-12" *ngIf="steps">
+              <div class="card col-md-6" style="width: 20rem;" *ngFor="let step of steps;">
+                <div class="card-body">
+                  <h4 class="card-title"> {{ step.name }} </h4>
+                  <h6 class="card-subtitle mb-2 text-muted"> Número de etapa: {{ step.numStep }}  </h6>
+                  <h6 class="card-subtitle mb-2 text-muted"> Duración: {{ step.during }} </h6>
+                  <p class="card-text"> {{ step.comments }} </p>
+                  <a href="#" class="btn btn-dark buttonMargin" *ngIf="identity.role!='ROLE_VISITOR' "[routerLink]="['/step', step._id]">Ver etapa</a>
+                </div>
+              </div>
+            </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,84 @@
+<div class="container">
+  <h3>{{ title }}</h3>
+</div>
+<div class="container" *ngIf="step || id === 'new'">
+  <div *ngIf="apiResponse"
+    class="form-control-feedback alert alert-danger mt-3">
+    {{ apiResponse }}
+  </div>
+  <form  [formGroup]="stepForm" (ngSubmit)="onSubmit()">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group">
+          <label for="sur1">Nombre</label>
+          <input
+                type="text"
+                class="form-control"
+                id="name"
+                placeholder="Nombre de etapa"
+                name="name"
+                formControlName="name">
+        </div>
+        <div *ngIf="stepForm.get('name').errors?.required && stepForm.get('name').touched"
+          class="form-control-feedback alert alert-danger">
+          El nombre es necesario.
+        </div>
+        <div *ngIf="stepForm.get('name').errors?.minlength && stepForm.get('name').touched"
+          class="form-control-feedback alert alert-danger">
+          Mínimo 5 caracteres.
+        </div>
+        <div class="form-group">
+          <label for="sur1">Número de etapa</label>
+          <input
+                type="number"
+                class="form-control"
+                id="numStep"
+                placeholder="Número de etapa"
+                name="numStep"
+                formControlName="numStep">
+        </div>
+        <div *ngIf="stepForm.get('numStep').errors?.required && stepForm.get('numStep').touched"
+          class="form-control-feedback alert alert-danger">
+          Introduzca el número de etapa.
+        </div>
+        <div *ngIf="stepForm.get('numStep').errors?.min && stepForm.get('numStep').dirty"
+          class="form-control-feedback alert alert-danger">
+          {{ stepForm.get('numStep').errors?.min.actual }}  no es válido, debe ser mayor o igual que {{ stepForm.get('numStep').errors?.min.min }}
+        </div>
+        <div class="form-group">
+          <label for="sur1">Duración, en horas (ej. 01:50:00)</label>
+          <input
+                type="text"
+                class="form-control"
+                id="during"
+                placeholder="Duración"
+                name="during"
+                formControlName="during">
+        </div>
+        <div *ngIf="stepForm.get('during').errors?.required && stepForm.get('during').touched"
+          class="form-control-feedback alert alert-danger">
+          La duración es necesaria.
+        </div>
+        <div *ngIf="stepForm.get('during').errors?.pattern && stepForm.get('during').dirty"
+          class="form-control-feedback alert alert-danger">
+          {{ stepForm.get('during').errors?.pattern.actualValue }} no es válido, debe tener la forma 01:00:00 (H:m:s)
+        </div>
+        <div class="form-group">
+          <label for="sur2">Comentarios</label>
+          <input
+                type="text"
+                class="form-control"
+                id="comments"
+                placeholder="Comentarios"
+                name="comments"
+                formControlName="comments">
+        </div>
+        <div *ngIf="stepForm.get('comments').errors?.required && stepForm.get('comments').touched"
+          class="form-control-feedback alert alert-danger">
+        Introduzca los comentarios.
+        </div>
+      </div>
+    </div>
+    <button type="submit" class="btn btn-dark" [disabled] = "!stepForm.valid || loading">Guardar</button>
+  </form>
+</div>

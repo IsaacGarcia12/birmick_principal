@@ -1,0 +1,86 @@
+<!-- <h1>Tus estudios <small>aquí los puedes administrar</small></h1> -->
+<div class="container" *ngIf="loading">
+  <h3>Cargando...</h3>
+</div>
+<div class="container" *ngIf="!loading && step">
+  <div class="row">
+      <h1> {{ step.name }} </h1>
+      <!-- <h1><small>Nombre del estudio</small> {{ step.name }} </h1> -->
+  </div>
+  <hr>
+  <div class="row">
+    <div class="col-md-4">
+      <h3>Detalles</h3>
+      <div class="card  col-md-12">
+        <div class="card-body">
+          <h6><b>Número de etapa: </b> {{ step.numStep }}</h6>
+          <h6><b>Duración: </b> {{ step.during }}</h6>
+          <p class="card-text"> {{ step.comments }} </p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="row">
+        <h3>Archivos</h3>
+      </div>
+      <div class="row  col-md-12" *ngIf="!files">
+        <p class="alert alert-danger"><strong>No hay archivos registrados</strong></p>
+      </div>
+      <div class="row" *ngIf="files">
+        <div class="col-sm-4" *ngFor="let file of files;">
+          <div class="card" style="margin-top:10px;">
+            <div class="card-body">
+              <img width="50" height="70" src="./assets/img/file.png" alt="file">
+              <h6><b> {{ file.name }} </b></h6>
+              <h6 class="card-subtitle mb-2 text-muted">{{ file.patientName }} {{ file.patientAsurname }} {{ file.patientMsurname }}</h6>
+              <button class="badge  badge-pill badge-dark" (click) = "downloadFile(file._id, file.name)">Descargar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row mt-4">
+        <h3>Formularios</h3>
+      </div>
+      <div class="row  col-md-12" *ngIf="!forms">
+        <p class="alert alert-danger"><strong>No hay formularios registrados</strong></p>
+      </div>
+      <div class="row" *ngIf="forms">
+        <div class="col-md-4" *ngFor="let form of forms;">
+          <div class="card">
+            <div class="card-body">
+              <h5><b> {{ form.name }} </b></h5>
+              <a href="#" class="badge  badge-pill badge-dark col-md-12" [routerLink]="['/formAnswers', form._id]">Ver respuestas</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-modal #downloadingFileModal>
+  <div class="app-modal-header">
+    <h4>Descargando archivo...</h4>
+    <small>Espere por favor <i [ngClass]="{ 'fa-spin':downloadFileLoading }"
+    class="fa fa-refresh fa-spin"></i></small>
+  </div>
+  <div class="app-modal-body">
+    En breve se mostrará la ventana del navegador que le permite guardarlo.
+  </div>
+  <div class="app-modal-footer">
+  </div>
+</app-modal>
+
+<app-modal #fileDownloadErrorModal>
+  <div class="app-modal-header">
+    <h4>Aviso</h4>
+  </div>
+  <div class="app-modal-body">
+    <div *ngIf="fileDownloadError">
+      <b class="text-danger">{{ fileDownloadError }}</b>
+    </div>
+  </div>
+  <div class="app-modal-footer">
+      <button type="button" class="btn btn-dark" (click)="fileDownloadErrorModal.hide()">Cerrar</button>
+  </div>
+</app-modal>

@@ -1,0 +1,24 @@
+<div class="container">
+  <!-- <h1>Tus estudios <small>aquí los puedes administrar</small></h1> -->
+  <h1>{{ title }}</h1>
+  <hr>
+  <div class="row col-md-12" *ngIf="!studies && !loading">
+    <p class="alert alert-danger col-md-12"><strong>{{ notStudiosMessage }}</strong></p>
+  </div>
+  <div class="" *ngIf="studies">
+    <div class="row">
+      <div class="col-sm-4" *ngFor="let studio of studies;">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title"> {{ studio.name }} </h4>
+            <h6 class="card-subtitle mb-2 text-muted"> Propietario: {{ studio.ownerName }} </h6>
+            <h6 class="card-subtitle mb-2 text-muted"> Creado: {{ studio.createdAt | date }} </h6>
+            <h6 class="card-subtitle mb-2 text-muted"> Aplicado: {{ studio.appliedAt | date }} </h6>
+            <p class="card-text"> {{ studio.comments }} </p>
+            <a href="#" class="card-link" [routerLink]="['/studio', studio._id]">Ver estudio</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

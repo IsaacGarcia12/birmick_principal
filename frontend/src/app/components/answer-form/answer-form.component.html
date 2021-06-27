@@ -1,0 +1,75 @@
+<div class="container" *ngIf="!form && loading">
+  <div class="" >
+    Cargando...
+  </div>
+</div>
+<div class="container" *ngIf="!form && !loading">
+  <div class="alert alert-danger" >
+    {{ getFormResponse }}
+  </div>
+</div>
+<div class="container" *ngIf="form && !loading">
+  <div class="" >
+    <h3><small>Responder formulario </small> {{ form.name }}</h3>
+  </div>
+  <div class="" *ngIf="!form.questions">
+    <div class="alert alert-danger">
+      No hay preguntas en el formulario
+    </div>
+  </div>
+  <div class="" *ngIf="form.questions">
+    <form [formGroup]='answerForm' (ngSubmit)="submitAnswers()">
+      <div class="form-group col-md-7">
+        <label for="answersBy"><b>¿Quién contesta el cuestionario?</b></label>
+        <input
+              type="text"
+              class="form-control"
+              id="answersBy"
+              placeholder="¿Quién contesta el cuestionario?"
+              name="answersBy"
+              formControlName="answersBy">
+      </div>
+      <div formArrayName="answers">
+        <div class="form-group col-md-7" *ngFor="let question of form.questions; let i = index;">
+          <div class="form-group">
+            <div class="col-md-7">
+              <label><b>{{ i+1 }}. {{ question.sentence }}</b></label>
+            </div>
+            <input
+              *ngIf="question.questionType === 'open_answer'"
+              type="text"
+              class="form-control"
+              [name]="i"
+              id="sentence"
+              [placeholder]="question.sentence"
+              [formControlName]="i">
+
+              <div class="" *ngIf="question.questionType === 'mult_opc'">
+                <label *ngFor="let o of question.options" class="mr-3">
+                  <input
+                        [formControlName]="i"
+                        type="radio"
+                        [name]="i"
+                        [value] = "o">
+                  {{ o }}
+                </label>
+              </div>
+          </div>
+        </div>
+      </div>
+      <button type="submit" name="button" class="btn btn-dark" [disabled]="!answerForm.valid">Guardar respuestas</button>
+    </form>
+</div>
+
+
+<app-modal #answerFormResponseModal>
+  <div class="app-modal-header">
+    <h4>Aviso</h4>
+  </div>
+  <div class="app-modal-body">
+    {{ answerFormResponse }}
+  </div>
+  <div class="app-modal-footer">
+      <button type="button" class="btn btn-dark" (click)="answerFormResponseModal.hide()">Cerrar</button>
+  </div>
+</app-modal>

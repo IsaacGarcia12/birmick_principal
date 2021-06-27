@@ -1,0 +1,36 @@
+<!-- <div *ngIf="!loggedIn"> -->
+<div *ngIf="!identity">
+  <div style="background:transparent !important" class="jumbotron jumbotron-fluid">
+    <div class="container">
+      <h1 class="display-3">Birmick</h1>
+      <p class="lead">Sistema para el Manejo de Información Clínica Experimental.</p>
+      <hr class="my-4">
+      <p class="lead">Birmick permite a los investigadores compartir información clínica experimental con sus colegas de manera segura.</p>
+    </div>
+  </div>
+</div>
+<div *ngIf="identity">
+  <div *ngIf="identity.role === 'ROLE_VISITOR'" class="row text-center">
+    <div class="col-md-12">
+      <div class="alert alert-warning" role="alert">
+        <h4 class="alert-heading">AVISO</h4>
+        <p>Si ya ha sido validado debe <b>CERRAR SESIÓN Y VOLVER A INGRESAR</b> para poder tener acceso a los privilegios de su nuevo rol.</p>
+      </div>
+    </div>
+  </div>
+  <div style="background:transparent !important" class="jumbotron jumbotron-fluid">
+    <div class="container">
+      <div *ngIf="identity.gender == 'masculino'">
+        <h1 class="display-3">¡Bienvenido {{identity.name}}!</h1>
+      </div>
+      <div *ngIf="identity.gender == 'femenino'">
+        <h1 class="display-3">¡Bienvenida {{identity.name}}!</h1>
+      </div>
+      <hr class="my-4">
+      <p class="lead">Esta es la página que aparece cuando has iniciado sesión.</p>
+    </div>
+  </div>
+  <div class="container">
+
+  </div>
+</div>

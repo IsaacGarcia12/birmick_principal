@@ -1,0 +1,171 @@
+<div class="container" *ngIf="!form && loading">
+  <div class="" >
+    <h3>Cargando...</h3>
+  </div>
+</div>
+<div class="container" *ngIf="!form && !loading">
+  <div class="" >
+    {{ getFormMessage }}
+  </div>
+</div>
+<div class="container" *ngIf="form && !loading">
+  <div class="" >
+    <h3><small>Editar formulario </small> {{ form.name }}</h3>
+  </div>
+  <button class="btn btn-dark buttonMargin" (click)="newQuestionModal.show()">
+    Agregar pregunta
+  </button>
+  <hr>
+  <div class="" *ngIf="!form.questions">
+    <div class="alert alert-danger">
+      No hay preguntas en el formulario
+    </div>
+  </div>
+  <div class="" *ngIf="form.questions">
+    <h5>Preguntas en el formulario: </h5>
+    <div class="form-group col-md-7"
+         *ngFor="let question of form.questions; let i = index;">
+      <div class="row">
+        <div class="col-md-7">
+          <label><b>{{ i+1 }}. {{ question.sentence }}</b></label>
+          <button type="button" name="button" class="badge badge-danger" *ngIf="question._id" (click) = "confirmQuestionDelete( question._id )">Eliminar pregunta</button>
+        </div>
+        <div class="col-md-3">
+        </div>
+      </div>
+        <input
+          *ngIf="question.questionType === 'open_answer'"
+          type="text"
+          class="form-control"
+          name="sentence"
+          id="sentence"
+          placeholder="Pregunta de respuesta abierta"
+          disabled>
+          <div class="" *ngIf="question.questionType === 'mult_opc'">
+            <label *ngFor="let o of question.options" class="mr-3">
+              <input
+                    type="radio"
+                    disabled>
+              {{ o }}
+            </label>
+          </div>
+    </div>
+  </div>
+  <div class="row text-center">
+    <div class="col-md-12">
+      <div class="alert alert-warning" role="alert">
+        <h4 class="alert-heading">Importante</h4>
+        <p>Esta página es sólo para editar el formulario. Para responderlo seleccione la opción de <b> responder </b> en la página de la etapa correspondiente.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-modal #newQuestionModal>
+  <div class="app-modal-header">
+    <h4>Agregar pregunta</h4>
+    <!-- <small>Introduzca los detalles de la pregunta.</small> -->
+    <small *ngIf="questionForm.value.questionType === 'mult_opc'">Debe rellenar al menos dos opciones para poder guardar la pregunta.</small>
+  </div>
+  <div class="app-modal-body">
+    <form [formGroup]='questionForm' (ngSubmit)="submitQuestion()">
+      <div class="form-group">
+        <label>Pregunta</label>
+        <input
+          type="text"
+          class="form-control"
+          name="sentence"
+          id="sentence"
+          placeholder="Pregunta"
+          formControlName="sentence">
+        </div>
+        <div class="form-group">
+          <label>Tipo</label>
+          <!-- Depediendo del tipo se muestra un combobox o un campo que muestre que es pregunta abierta -->
+          <select class="form-control" name="questionType" id="questionType" formControlName="questionType">
+            <option value="mult_opc">Opción múltiple</option>
+            <option value="open_answer">Pregunta abierta</option>>
+          </select>
+        </div>
+        <div class="form-group" *ngIf="questionForm.value.questionType === 'mult_opc'">
+          <label >Ingrese las opciones de respuesta</label>
+          <div formArrayName="options" class="optionsGroup">
+            <input *ngFor="let option of questionForm['controls'].options['controls']; let i = index;"
+                    [formControlName]="i"
+                    type="text"
+                    class="form-control mt-2"
+                    placeholder="Ingrese la opción">
+          </div>
+            <button (click)="addAnswerOption()"
+            *ngIf="questionForm['controls'].options['controls'].length < 5"
+              type="button"
+              class="badge badge-dark mt-2 col-md-5">
+              Nueva opción
+            </button>
+            <button (click)="removeAnswerOption()"
+            *ngIf="questionForm['controls'].options['controls'].length > 2"
+              type="button"
+              class="badge badge-dark mt-2 col-md-5">
+              Quitar una opción
+            </button>
+          <div class="form-group" *ngIf="questionForm['controls'].options['controls'].length == 5">
+            <h6>Sólo puede agregar 5 opciones</h6>
+          </div>
+        </div>
+        <div class="tm-3 bm-3" *ngIf="questionForm.value.questionType === 'open_answer'">
+          <h5>Pregunta de respuesta abierta</h5>
+        </div>
+        <button type="submit" name="button" class="btn btn-dark"
+        [disabled] = "!questionForm.valid ||
+                      ((!questionForm['controls'].options['controls'][0].value ||
+                      !questionForm['controls'].options['controls'][1].value) &&
+                      questionForm.value.questionType === 'mult_opc')">
+                      Guardar pregunta
+                    </button>
+    </form>
+  </div>
+  <div class="app-modal-footer">
+      <button type="button" class="btn btn-dark" (click)="newQuestionModal.hide()">Cerrar diálogo</button>
+    </div>
+</app-modal>
+
+<app-modal #newQuestiontResponseModal>
+  <div class="app-modal-header">
+    <h4>Aviso</h4>
+  </div>
+  <div class="app-modal-body">
+    <div *ngIf="addQuestionMessage">
+      {{ addQuestionMessage }}
+    </div>
+  </div>
+  <div class="app-modal-footer">
+      <button type="button" class="btn btn-dark" (click)="newQuestiontResponseModal.hide()">Cerrar</button>
+  </div>
+</app-modal>
+
+<app-modal #deleteQuestionConfirmationModal>
+  <div class="app-modal-header">
+    <h4>Aviso</h4>
+  </div>
+  <div class="app-modal-body">
+    ¿Está seguro de eliminar la pregunta?
+  </div>
+  <div class="app-modal-footer">
+      <button type="button" class="btn btn-danger" (click)="deleteQuestion()">Eliminar</button>
+      <button type="button" class="btn btn-dark" (click)="newQuestiontResponseModal.hide()">Cerrar</button>
+  </div>
+</app-modal>
+
+<app-modal #deleteQuestiontResponseModal>
+  <div class="app-modal-header">
+    <h4>Aviso</h4>
+  </div>
+  <div class="app-modal-body">
+    <div *ngIf="deleteQuestionMessage">
+      {{ deleteQuestionMessage }}
+    </div>
+  </div>
+  <div class="app-modal-footer">
+      <button type="button" class="btn btn-dark" (click)="deleteQuestiontResponseModal.hide()">Cerrar</button>
+  </div>
+</app-modal>

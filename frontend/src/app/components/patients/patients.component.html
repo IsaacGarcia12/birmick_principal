@@ -1,0 +1,57 @@
+<div class="container">
+  <!-- <h1>Tus estudios <small>aquí los puedes administrar</small></h1> -->
+  <h1>Tus pacientes</h1>
+  <a href="#" class="btn btn-dark buttonMargin" [routerLink]="['/editPatient', 'new']">Nuevo paciente</a>
+  <hr>
+  <div class="row col-md-12" *ngIf="(!patients || patients.length <= 0) && !loading">
+    <p class="alert alert-danger col-md-12"><strong>No hay pacientes registrados</strong></p>
+  </div>
+  <div class="" *ngIf="patients || patients.length > 0">
+    <div class="row">
+      <div class="col-sm-4" *ngFor="let patient of patients;">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title"> {{ patient.name }} {{ patient.asurname }} {{ patient.msurname }} </h4>
+            <h6 class="card-subtitle mb-2 text-muted"> <b>Genero:</b> {{ patient.gender }} </h6>
+            <h6 class="card-subtitle mb-2 text-muted"> <b>Altura:</b> {{ patient.height }} </h6>
+            <h6 class="card-subtitle mb-2 text-muted"> <b>Peso:</b> {{ patient.weight }} </h6>
+            <h6 class="card-subtitle mb-2 text-muted"> <b>Edad:</b> {{ patient.age }} </h6>
+            <h6 class="card-subtitle mb-2 text-muted"> <b>Actividad principal:</b> {{ patient.mainActivity }} </h6>
+            <a href="#" class="btn btn-dark btn-sm" [routerLink]="['/editPatient', patient._id]">Editar paciente</a>
+            <button class="btn btn-danger btn-sm" (click)="showDeletePatientModal( patient._id )">Eliminar paciente</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-modal #deletePatientConfirmationModal>
+  <div class="app-modal-header">
+    <h4>Aviso</h4>
+  </div>
+  <div class="app-modal-body">
+    <b>¿Está seguro de eliminar al paciente?</b>
+    <p><b>Se eliminará TODA la información asociada a él</b></p>
+    <b>¿Está seguro de eliminar al paciente?</b>
+    <p class="text-danger"><b>Esta acción no se puede deshacer</b></p>
+  </div>
+  <div class="app-modal-footer">
+      <button type="button" class="btn btn-danger" (click)="deletePatient()">Eliminar</button>
+      <button type="button" class="btn btn-dark" (click)="cancelPatientDelete()">Cerrar</button>
+  </div>
+</app-modal>
+
+<app-modal #deleteResponseModal>
+  <div class="app-modal-header">
+    <h4>Aviso</h4>
+  </div>
+  <div class="app-modal-body">
+    <div *ngIf="deleteMessage">
+      <b class="text-success">{{ deleteMessage }}</b>
+    </div>
+  </div>
+  <div class="app-modal-footer">
+      <button type="button" class="btn btn-dark" (click)="deleteResponseModal.hide()">Cerrar</button>
+  </div>
+</app-modal>

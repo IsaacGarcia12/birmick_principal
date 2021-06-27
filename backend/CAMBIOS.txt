@@ -1,0 +1,11 @@
+Cambios de pruebas:
+
+- Se agregaron las dependencias 'lodash' y 'uuid'
+- La conexion a Neo y el método que devuelve una sesión se movieron a la carpeta neo4j en el archivo 'dbUtils.js'
+- Los modelos individuales están dentro de la carpeta 'neo4j' de 'models'
+- Los modelos que contienen las funciones de almacenaje y consulta están dentro de 'models'
+- Los metodos de registro y login ya estan en el modelo, no en el controlador
+
+POSIBLE CAMBIO:
+- Agregar un campo al modelo de usuario que contenga una cadena aleatoria,
+si al iniciar sesion esa cadena no coincide con la que está en la base de datos no concede acceso.
